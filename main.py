@@ -36,8 +36,7 @@ def run():
     # Logger'a ilgili konfigurasyon atamasini yap
     configure_logger(team_name)
 
-    # Takimlar kendi kodlarini ObjectDetectionModel sinifi icerisine implemente edebilirler. (OPSIYONEL)
-    detection_model = ObjectDetectionModel(evaluation_server_url)
+   
 
     # Sunucuya baglan
     server = ConnectionHandler(evaluation_server_url, username=team_name, password=password)
@@ -48,12 +47,22 @@ def run():
 
     # Mevcutta aktif olan oturumdan tum translation verilerini cek.
     translations_json = server.get_translations()
+    
+    translation = translations_json[0]
+    
+    print("Translation: ", translation)
+    
+    # Takimlar kendi kodlarini ObjectDetectionModel sinifi icerisine implemente edebilirler. (OPSIYONEL)
+    detection_model = ObjectDetectionModel(evaluation_server_url, translation)
 
 
 
     # images klasorunu olustur
     images_folder = "./_images/"
     Path(images_folder).mkdir(parents=True, exist_ok=True)
+    
+    
+    
 
     # Nesne tespiti modelini frame frame olacak sekilde calistir
     for frame, translation in tqdm(zip(frames_json, translations_json), total=len(frames_json)):

@@ -14,7 +14,11 @@ import cv2
 
 
 class TrackerModel:
-    def __init__(self) -> None:
+    
+    def __init__(self, translation) -> None:
+        
+        self.TRANSLATION_X = translation["translation_x"]
+        self.TRANSLATION_Y = translation["translation_y"]
         
         config = Config()   
 
@@ -58,8 +62,10 @@ class TrackerModel:
             bitis_zamani = time.time()
             #print(f"fps {1/(bitis_zamani-baslangic_zamani)}")
             self.img_id_counter += 1
-            
-        return (x, y, z)
+        if x is None:
+            return {"x": x, "y": y, "z": z}
+        else:
+            return {"x": x[0] + self.TRANSLATION_X, "y": y[0]+ self.TRANSLATION_Y, "z": z[0]}
                 
     def getImage(self, image_path):
         """

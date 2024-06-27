@@ -21,12 +21,12 @@ class ObjectDetectionModel:
     # Takımların modelleri icin tanimlanmis sinif
     
 
-    def __init__(self, evaluation_server_url):
+    def __init__(self, evaluation_server_url, translation):
         logging.info('Created Object Detection Model')
         self.evaulation_server = evaluation_server_url
         # Modelinizi bu kısımda init edebilirsiniz.
         self.model = self.getYoloModel()# Örnektir!
-        self.TrackerModel = TrackerModel()
+        self.TrackerModel = TrackerModel(translation)
 
     @staticmethod
     def download_image(img_url, images_folder):
@@ -78,12 +78,14 @@ class ObjectDetectionModel:
 
         
         result = self.TrackerModel.path_tracker(image_path)
+        print("Tracking CONSTS: ", self.TrackerModel.TRANSLATION_X, self.TrackerModel.TRANSLATION_Y)
         print("Tracking Result: ", result)
+        
         
         if health_status == '0':
             # Takimlar buraya kendi gelistirdikleri algoritmalarin sonuclarini entegre edebilirler.
-            pred_translation_x = random.randint(1, 10) # Ornek olmasi icin rastgele degerler atanmistir takimlar kendi sonuclarini kullanmalidirlar.
-            pred_translation_y = random.randint(1, 10) # Ornek olmasi icin rastgele degerler atanmistir takimlar kendi sonuclarini kullanmalidirlar.
+            pred_translation_x = result["x"] # Ornek olmasi icin rastgele degerler atanmistir takimlar kendi sonuclarini kullanmalidirlar.
+            pred_translation_y = result["y"]# Ornek olmasi icin rastgele degerler atanmistir takimlar kendi sonuclarini kullanmalidirlar.
         else :
             pred_translation_x = prediction.gt_translation_x
             pred_translation_y = prediction.gt_translation_y
