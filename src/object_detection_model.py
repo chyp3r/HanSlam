@@ -61,14 +61,6 @@ class ObjectDetectionModel:
         # Örneğin :
         # for i in results: # gibi
         for result in results:
-            print(
-                type(result["cls"]),
-                type(result["landing_status"]),
-                type(result["top_left_x"]),
-                type(result["top_left_y"]),
-                type(result["bottom_right_x"]),
-                type(result["bottom_right_y"])
-            )
             
             d_obj = DetectedObject( result["cls"],
                                     result["landing_status"],
