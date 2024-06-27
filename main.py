@@ -9,6 +9,7 @@ from tqdm import tqdm
 from src.connection_handler import ConnectionHandler
 from src.frame_predictions import FramePredictions
 from src.object_detection_model import ObjectDetectionModel
+import time
 
 
 def configure_logger(team_name):
@@ -72,7 +73,12 @@ def run():
         # Healt status kontrolu ikinci gorevde sistemin ne zaman devreye girmesi gerektigini gosterir
         health_status = translation['health_status']
         # Tespit modelini calistir
+        
+        start_time =  time.time()
         predictions = detection_model.process(predictions,evaluation_server_url, health_status)
+        end_time = time.time()
+        
+        print("Time: ", end_time - start_time)
         # Modelin o frame'e ait tahmin degerlerini sunucuya gonder
         result = server.send_prediction(predictions)
 
